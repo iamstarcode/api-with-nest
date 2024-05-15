@@ -12,6 +12,6 @@ export class QuidaxController {
   @Get('markets')
   @HttpCode(HttpStatus.OK)
   async getMarkets() {
-    await this.quidaxService.getMarkets();
+    return await this.quidaxService.getMarkets();
   }
 }
