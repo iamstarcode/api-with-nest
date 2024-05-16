@@ -39,7 +39,9 @@ export class QuidaxService {
   }
 
   async getUserWallets() {
-    const wallets = new Wallets(this.configService.get('QUIDAX_SECRTETE_KEY'));
+    const wallets = new Wallets({
+      apiSecreteKey: this.configService.get('QUIDAX_SECRTETE_KEY'),
+    });
     const data = await wallets.getUserWallets();
     return data;
   }
