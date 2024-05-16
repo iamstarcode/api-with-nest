@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { API_BASE_URL } from './constants';
 import { ConfigService } from '@nestjs/config';
+import { Wallets } from './features/wallets';
 
 @Injectable()
 export class QuidaxService {
@@ -35,5 +36,11 @@ export class QuidaxService {
       console.log(error);
       throw error;
     }
+  }
+
+  async getUserWallets() {
+    const wallets = new Wallets(this.configService.get('QUIDAX_SECRTETE_KEY'));
+    const data = await wallets.getUserWallets();
+    return data;
   }
 }

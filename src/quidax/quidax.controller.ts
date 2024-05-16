@@ -14,4 +14,11 @@ export class QuidaxController {
   async getMarkets() {
     return await this.quidaxService.getMarkets();
   }
+
+  //Walets
+  @Get('user/wallets')
+  @HttpCode(HttpStatus.OK)
+  async getUserWallets() {
+    return await this.quidaxService.getUserWallets();
+  }
 }
