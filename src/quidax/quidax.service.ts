@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { API_BASE_URL } from './constants';
 import { ConfigService } from '@nestjs/config';
 import { Wallets } from './features/wallets';
+import { Markets } from './features/market';
 
 @Injectable()
 export class QuidaxService {
@@ -43,6 +44,15 @@ export class QuidaxService {
       apiSecreteKey: this.configService.get('QUIDAX_SECRTETE_KEY'),
     });
     const data = await wallets.getUserWallets();
+    return data;
+  }
+
+  async getCurrencyMartketTicker(currency: string) {
+    const markets = new Markets({
+      apiSecreteKey: this.configService.get('QUIDAX_SECRTETE_KEY'),
+    });
+
+    const data = await markets.getCurrencyMarketTicker(currency);
     return data;
   }
 }

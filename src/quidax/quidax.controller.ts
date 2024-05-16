@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Param } from '@nestjs/common';
 import { QuidaxService } from './quidax.service';
 
 @Controller('quidax')
@@ -13,6 +13,12 @@ export class QuidaxController {
   @HttpCode(HttpStatus.OK)
   async getMarkets() {
     return await this.quidaxService.getMarkets();
+  }
+
+  @Get('markets/tickers/:currency')
+  @HttpCode(HttpStatus.OK)
+  async getMarketsTickers(@Param('currency') currency: string) {
+    return await this.quidaxService.getCurrencyMartketTicker(currency);
   }
 
   //Walets

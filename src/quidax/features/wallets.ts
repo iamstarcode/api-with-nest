@@ -13,7 +13,7 @@ export class Wallets {
       },
     };
   }
-  public async getUserWallets() {
+  async getUserWallets() {
     const res = await fetch(`${this.baseURL}/users/me/wallets`, this.options);
     const data = await res.json();
     return data;
