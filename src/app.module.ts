@@ -3,16 +3,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { QuidaxModule } from './quidax/quidax.module';
 import { ConfigModule } from '@nestjs/config';
-import { CryptoprocessingController } from './cryptoprocessing/cryptoprocessing.controller';
-import { CryptoprocessingModule } from './cryptoprocessing/cryptoprocessing.module';
+
+import { CoinspaidModule } from './coinspaid/coinspaid.module';
 
 @Module({
   imports: [
     QuidaxModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    CryptoprocessingModule,
+    CoinspaidModule,
   ],
-  controllers: [AppController, CryptoprocessingController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
