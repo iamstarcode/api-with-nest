@@ -7,6 +7,6 @@ export class Currencies {
     this.url = url;
   }
   async getCurrenciesList() {
-    const res = await fetch(this.url, this.options);
+    // const res = await fetch(this.url, this.options);
   }
 }
