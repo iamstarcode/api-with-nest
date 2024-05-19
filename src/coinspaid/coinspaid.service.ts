@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 //import { Currencies } from './features/currencies';
 import * as crypto from 'crypto';
-import { CurrenciesListDto } from './dtos/currencies-dto';
+import { CurrenciesListDto, TransactionInfoDto } from './dtos/currencies-dto';
+import { Transactions } from './features/transactions';
 //import { Currencies } from './features/currencies';
 
 @Injectable()
@@ -33,6 +34,7 @@ export class CoinspaidService {
   }
 
   async currenciesList(currenciesListDto: CurrenciesListDto) {
+    //console.log(typeof currenciesListDto, 'gkgkgkmtkgmk');
     const url = `${this.baseURL}/currencies/list`;
     const options: RequestInit = {
       method: 'POST',
@@ -47,6 +49,20 @@ export class CoinspaidService {
     const res = await fetch(url, options);
     const data = await res.json();
     return data.data;
+  }
+
+  async transactionInfo(transactionInfoDto: TransactionInfoDto) {
+    const url = `${this.baseURL}/transactions/info`;
+
+    const transactions = new Transactions();
+    const transactionsInfo = transactions.getTransactionInfo({
+      url,
+      body: transactionInfoDto,
+      key: this.configService.get('COINPAID_KEY'),
+      signature: this.generateSignature(transactionInfoDto),
+    });
+
+    return await transactionsInfo;
   }
 
   private generateSignature(requestBody: any) {
