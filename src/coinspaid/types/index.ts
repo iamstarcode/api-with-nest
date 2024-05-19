@@ -7,3 +7,10 @@ export interface CurrencyTpe {
   withdrawal_fee_percent: string;
   precision: number;
 }
+
+export interface IFeatures {
+  url: string;
+  body: any;
+  signature: string;
+  processingKey: string;
+}

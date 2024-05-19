@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 //import { Currencies } from './features/currencies';
 import * as crypto from 'crypto';
-import { CurrenciesListDto, TransactionInfoDto } from './dtos/currencies-dto';
+import { CurrenciesListDto } from './dtos/currencies-dto';
 import { Transactions } from './features/transactions';
+import { Currencies } from './features/currencies';
 //import { Currencies } from './features/currencies';
 
 @Injectable()
@@ -34,37 +35,27 @@ export class CoinspaidService {
   }
 
   async currenciesList(currenciesListDto: CurrenciesListDto) {
-    //console.log(typeof currenciesListDto, 'gkgkgkmtkgmk');
-    const url = `${this.baseURL}/currencies/list`;
-    const options: RequestInit = {
-      method: 'POST',
-      body: JSON.stringify(currenciesListDto),
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Processing-Key': process.env.COINPAID_KEY!,
-        'X-Processing-Signature': this.generateSignature(currenciesListDto),
-      },
-    };
+    const currencies = new Currencies({
+      url: `${this.baseURL}/currencies/list`,
+      body: currenciesListDto,
+      processingKey: this.configService.get('COINPAID_KEY'),
+      signature: this.generateSignature(currenciesListDto),
+    });
 
-    const res = await fetch(url, options);
-    const data = await res.json();
-    return data.data;
+    const data = await currencies.getCurrenciesList();
+    return data;
   }
 
-  async transactionInfo(body: TransactionInfoDto) {
-    const url = `${this.baseURL}/transactions/info`;
-    const processingKey = this.configService.get('COINPAID_KEY');
-    const signature = this.generateSignature(body);
-
+  async transactionInfo(id: number) {
     const transactions = new Transactions({
-      url,
-      body,
-      processingKey,
-      signature,
+      url: `${this.baseURL}/transactions/info`,
+      body: { id },
+      processingKey: this.configService.get('COINPAID_KEY'),
+      signature: this.generateSignature({ id }),
     });
-    const transactionsInfo = transactions.getTransactionInfo();
+    const transactionsInfo = await transactions.getTransactionInfo();
 
-    return await transactionsInfo;
+    return transactionsInfo;
   }
 
   private generateSignature(requestBody: any) {
