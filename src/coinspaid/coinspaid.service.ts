@@ -51,16 +51,18 @@ export class CoinspaidService {
     return data.data;
   }
 
-  async transactionInfo(transactionInfoDto: TransactionInfoDto) {
+  async transactionInfo(body: TransactionInfoDto) {
     const url = `${this.baseURL}/transactions/info`;
+    const processingKey = this.configService.get('COINPAID_KEY');
+    const signature = this.generateSignature(body);
 
-    const transactions = new Transactions();
-    const transactionsInfo = transactions.getTransactionInfo({
+    const transactions = new Transactions({
       url,
-      body: transactionInfoDto,
-      key: this.configService.get('COINPAID_KEY'),
-      signature: this.generateSignature(transactionInfoDto),
+      body,
+      processingKey,
+      signature,
     });
+    const transactionsInfo = transactions.getTransactionInfo();
 
     return await transactionsInfo;
   }
