@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { IFeatures } from '../types';
 
 export class Base {
@@ -18,6 +19,17 @@ export class Base {
         'X-Processing-Key': processingKey,
         'X-Processing-Signature': signature,
       },
+    };
+  }
+
+  async addressTake() {
+    const res = await axios(this.url, { method: 'POST', ...this.options });
+
+    if (res.status == 200) {
+      return res.data;
+    }
+    return {
+      msg: 'An error occured',
     };
   }
 }

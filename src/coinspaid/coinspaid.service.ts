@@ -1,37 +1,43 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Injectable,
+  Req,
+  HttpException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 //import { Currencies } from './features/currencies';
 import * as crypto from 'crypto';
 import { CurrenciesListDto } from './dtos/currencies-dto';
 import { Transactions } from './features/transactions';
 import { Currencies } from './features/currencies';
+import { AddressTakeDto } from './dtos/address-take.dto';
+//import { Base } from './features/base';
 //import { Currencies } from './features/currencies';
+
+import { Request } from 'express';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 @Injectable()
 export class CoinspaidService {
   baseURL: string;
   optioins: RequestInit;
-  headers: RequestInit['headers'];
+  //headers: RequestInit['headers'];
   constructor(private readonly configService: ConfigService) {
     this.baseURL =
       this.configService.get('NODE_ENV') == 'development'
         ? this.configService.get('COINPAID_DEV_URL')
         : this.configService.get('COINPAID_URL');
   }
-  async addressTake() {
-    //const res = await fetch("dcdc",{headers:{}})
-    /*  const res = await fetch(`${apiURL}/currencies/list`, {
-      method: 'POST',
-      body: requestBody,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Processing-Key': process.env.COINPAID_KEY!,
-        'X-Processing-Signature': generateSignature(
-          requestBody,
-          process.env.COINPAID_SECRET_KEY!,
-        ),
-      },
-    }); */
+  async addressTake(
+    @Body() createAddressDto: AddressTakeDto,
+    @Req() request: Request,
+  ) {
+    return await this.handleRequest({
+      dto: createAddressDto,
+      request,
+      url: `${this.baseURL}/addresses/take`,
+    });
   }
 
   async currenciesList(currenciesListDto: CurrenciesListDto) {
@@ -46,16 +52,14 @@ export class CoinspaidService {
     return data;
   }
 
-  async transactionInfo(id: number) {
-    const transactions = new Transactions({
+  async transactionInfo(id: number, @Req() request: Request) {
+    const obj = {
+      dto: { id },
+      request,
       url: `${this.baseURL}/transactions/info`,
-      body: { id },
-      processingKey: this.configService.get('COINPAID_KEY'),
-      signature: this.generateSignature({ id }),
-    });
-    const transactionsInfo = await transactions.getTransactionInfo();
-
-    return transactionsInfo;
+    };
+    const data = await this.handleRequest(obj);
+    return data;
   }
 
   private generateSignature(requestBody: any) {
@@ -65,5 +69,61 @@ export class CoinspaidService {
       .digest('hex');
 
     return signature;
+  }
+
+  public async handleRequest({
+    dto,
+    request,
+    url,
+  }: {
+    dto: any;
+    request?: Request;
+    url: string;
+  }) {
+    const httpMethod = request.method;
+    const options: AxiosRequestConfig = {
+      data: dto,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Processing-Key': this.configService.get('COINPAID_KEY'),
+        'X-Processing-Signature': this.generateSignature(dto),
+      },
+    };
+
+    let response: AxiosResponse;
+    if (httpMethod === 'POST') {
+      try {
+        response = await axios(url, { method: 'POST', ...options });
+      } catch (error) {
+        this.handleAxiosError(error);
+      }
+    } else if (httpMethod === 'GET') {
+      try {
+        response = await axios.get(url, options);
+      } catch (error) {
+        this.handleAxiosError(error);
+      }
+    }
+
+    return response.data;
+  }
+
+  private handleAxiosError(error: any): void {
+    if (error.response) {
+      // Server responded with a status code other than 2xx
+      throw new HttpException(
+        {
+          status: error.response.status,
+          error: error.response.data,
+        },
+        error.response.status,
+      );
+    } else if (error.request) {
+      // No response received from server
+      throw new HttpException('No response received from server', 504);
+    } else {
+      // Something happened in setting up the request
+      throw new HttpException(error.message, 500);
+    }
   }
 }
