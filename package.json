@@ -27,6 +27,8 @@
     "axios": "^1.6.8",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "quidax-node-api": "^1.0.0",
+    "quidax-package": "^1.0.36",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },
@@ -69,5 +71,6 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "packageManager": "pnpm@9.1.4+sha256.30a1801ac4e723779efed13a21f4c39f9eb6c9fbb4ced101bce06b422593d7c9"
 }

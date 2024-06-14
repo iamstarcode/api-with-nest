@@ -3,11 +3,14 @@ import { IsString } from 'class-validator';
 
 export class AddressTakeDto {
   @IsString()
-  foriegnId: string;
+  foreign_id: string;
 
   @IsString()
   currency: string;
 
   @Optional()
-  convertTo: string;
+  convert_to: string;
+
+  @Optional()
+  tag: string;
 }

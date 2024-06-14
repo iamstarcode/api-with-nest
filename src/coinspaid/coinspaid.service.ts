@@ -1,19 +1,9 @@
-import {
-  BadRequestException,
-  Body,
-  Injectable,
-  Req,
-  HttpException,
-} from '@nestjs/common';
+import { Body, Injectable, Req, HttpException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-//import { Currencies } from './features/currencies';
 import * as crypto from 'crypto';
 import { CurrenciesListDto } from './dtos/currencies-dto';
-import { Transactions } from './features/transactions';
 import { Currencies } from './features/currencies';
 import { AddressTakeDto } from './dtos/address-take.dto';
-//import { Base } from './features/base';
-//import { Currencies } from './features/currencies';
 
 import { Request } from 'express';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
@@ -58,10 +48,11 @@ export class CoinspaidService {
       request,
       url: `${this.baseURL}/transactions/info`,
     };
-    const data = await this.handleRequest(obj);
-    return data;
+    return await this.handleRequest(obj);
+    //return data;
   }
 
+  //Helpers
   private generateSignature(requestBody: any) {
     const signature = crypto
       .createHmac('sha512', this.configService.get('COINPAID_SECRET_KEY'))
@@ -71,7 +62,7 @@ export class CoinspaidService {
     return signature;
   }
 
-  public async handleRequest({
+  private async handleRequest({
     dto,
     request,
     url,
@@ -107,7 +98,7 @@ export class CoinspaidService {
 
     return response.data;
   }
-
+  //Probation to move out of her
   private handleAxiosError(error: any): void {
     if (error.response) {
       // Server responded with a status code other than 2xx

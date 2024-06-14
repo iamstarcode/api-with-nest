@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { CoinspaidService } from './coinspaid.service';
 import { CurrenciesListDto } from './dtos/currencies-dto';
-import { ConfigService } from '@nestjs/config';
 import { AddressTakeDto } from './dtos/address-take.dto';
 
 import { Request } from 'express';
@@ -19,16 +18,13 @@ import { Request } from 'express';
 @Controller('coinspaid')
 export class CoinspaidController {
   constructor(private readonly coinspaidService: CoinspaidService) {}
+
   @Post('addresses/take')
   async addressTake(
     @Body() addressTakeDto: AddressTakeDto,
     @Req() request: Request,
   ) {
-    return await this.coinspaidService.handleRequest({
-      dto: addressTakeDto,
-      request,
-      url: 'addresses/take',
-    });
+    return await this.coinspaidService.addressTake(addressTakeDto, request);
   }
 
   @Post('currencies/list')
