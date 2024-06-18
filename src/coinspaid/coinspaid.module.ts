@@ -4,6 +4,6 @@ import { CoinspaidController } from './coinspaid.controller';
 
 @Module({
   providers: [CoinspaidService],
-  controllers: [CoinspaidController]
+  controllers: [CoinspaidController],
 })
 export class CoinspaidModule {}

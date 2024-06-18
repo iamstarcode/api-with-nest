@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Req } from '@nestjs/common';
 import { API_BASE_URL } from './constants';
 import { ConfigService } from '@nestjs/config';
 import { Wallets } from './features/wallets';
 import { Markets } from './features/market';
+import * as crypto from 'crypto';
+
+import { Request } from 'express';
 
 @Injectable()
 export class QuidaxService {
@@ -54,5 +57,35 @@ export class QuidaxService {
 
     const data = await markets.getCurrencyMarketTicker(currency);
     return data;
+  }
+
+  async isWebhookSignatureValid(@Req() req: Request) {
+    const quidaxSignatureHeader: string = req.headers[
+      'quidax-signature'
+    ] as string;
+
+    //
+    const [timestampSection, signatureSection] =
+      quidaxSignatureHeader.split('=');
+
+    const [timestampPrefix, timestamp] = timestampSection.split('=');
+
+    const [signaturePrefix, signature] = signatureSection.split('=');
+
+    const requestBody = JSON.stringify(req.body);
+
+    const payload = `${timestamp}.${requestBody}`;
+
+    const created_signature = crypto
+      .createHmac('sha256', this.configService.get('QUIDAX_SECRET_KEY'))
+      .update(payload)
+      .digest()
+      .toString('hex');
+
+    if (signature === created_signature) {
+      return true;
+    }
+
+    return false;
   }
 }
