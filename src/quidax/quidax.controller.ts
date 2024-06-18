@@ -59,7 +59,6 @@ export class QuidaxController {
   @HttpCode(HttpStatus.OK)
   async fetchSubaccounts(@Param('userId') userId: string) {
     //  return await this.quidax.wallets.fetch_all_user_wallets('me');
-    console.log(userId, 'mgkmgkmkemgk');
     const data = await this.quidax.user.fetchSubAccount(userId);
 
     return data;

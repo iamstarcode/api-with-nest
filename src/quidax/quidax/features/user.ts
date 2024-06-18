@@ -7,12 +7,12 @@ import CustomError from '../errors';
  * @param {string} merchant_id - The id of the merchant
  */
 class User {
-  public base_url: string;
+  public baseUrl: string;
 
   public options: { headers: { Authorization: string } };
 
   constructor(public apiKey: string) {
-    this.base_url = 'https://www.quidax.com/api/v1';
+    this.baseUrl = 'https://www.quidax.com/api/v1/users';
     this.options = {
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -31,11 +31,7 @@ class User {
       lastname,
     };
     try {
-      const response = await axios.post(
-        `${this.base_url}/users`,
-        body,
-        this.options,
-      );
+      const response = await axios.post(`${this.baseUrl}`, body, this.options);
       const { data } = response;
       if (data?.response?.status > 300) {
         throw Error(data);
@@ -53,7 +49,7 @@ class User {
   public async fetchSubAccount(userId: string) {
     try {
       const response = await axios.get(
-        `${this.base_url}/users/${userId}`,
+        `${this.baseUrl}/${userId}`,
         this.options,
       );
       const { data } = response;
@@ -71,7 +67,7 @@ class User {
 
   public async fetchAllSubAccounts() {
     try {
-      const response = await axios.get(`${this.base_url}/users`, this.options);
+      const response = await axios.get(`${this.baseUrl}/users`, this.options);
       return response.data;
     } catch (error) {
       CustomError.processError(error);
