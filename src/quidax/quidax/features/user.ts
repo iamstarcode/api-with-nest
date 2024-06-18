@@ -67,7 +67,7 @@ class User {
 
   public async fetchAllSubAccounts() {
     try {
-      const response = await axios.get(`${this.baseUrl}/users`, this.options);
+      const response = await axios.get(`${this.baseUrl}`, this.options);
       return response.data;
     } catch (error) {
       CustomError.processError(error);

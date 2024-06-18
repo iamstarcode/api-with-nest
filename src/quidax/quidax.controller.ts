@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
@@ -59,8 +60,26 @@ export class QuidaxController {
   @HttpCode(HttpStatus.OK)
   async fetchSubaccounts(@Param('userId') userId: string) {
     //  return await this.quidax.wallets.fetch_all_user_wallets('me');
-    const data = await this.quidax.user.fetchSubAccount(userId);
+    // const data = await this.quidax.user.fetchSubAccount(userId);
 
+    // return data;
+    return {};
+    // return await this.quidaxService.getUserWallets();
+  }
+
+  @Post('users/')
+  @HttpCode(HttpStatus.OK)
+  async createSubaccounts(@Body() body: any) {
+    console.log(body, 'mvkmrkvmkr');
+    //  return await this.quidax.wallets.fetch_all_user_wallets('me');
+    // const data = await this.quidax.user.fetchSubAccount(userId);
+    const data = await this.quidax.user.createSubaccount(
+      body.email,
+      body.first_name,
+      body.last_name,
+    );
+
+    console.log(data, 'bhbhbfh');
     return data;
     // return {};
     // return await this.quidaxService.getUserWallets();
