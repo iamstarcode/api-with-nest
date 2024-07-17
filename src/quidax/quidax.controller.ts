@@ -43,7 +43,7 @@ export class QuidaxController {
   @Get('markets/tickers/:currency')
   @HttpCode(HttpStatus.OK)
   async getMarketsTickers(@Param('currency') currency: string) {
-    return await this.quidaxService.getCurrencyMartketTicker(currency);
+    return await this.quidax.markets.getMarketTicker(currency);
   }
 
   //Walets
