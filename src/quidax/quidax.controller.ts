@@ -9,15 +9,16 @@ import {
   Req,
 } from '@nestjs/common';
 import { QuidaxService } from './quidax.service';
-// const Quidax = require('quidax-node-api');
 import { ConfigService } from '@nestjs/config';
 
 import { Request } from 'express';
 
+import Quidax from '@iamstarcode/quidax-js';
+
 // import Quidax from 'quidax-package'; // Typescript
 
 import { WebhookEvents } from './webook.events';
-import Quidax from './quidax';
+// import Quidax from './quidax';
 
 @Controller('quidax')
 export class QuidaxController {
@@ -37,7 +38,7 @@ export class QuidaxController {
   @Get('markets')
   @HttpCode(HttpStatus.OK)
   async getMarkets() {
-    return await this.quidaxService.getMarkets();
+    return await this.quidax.markets.getMarketTickers();
   }
 
   @Get('markets/tickers/:currency')
@@ -60,10 +61,10 @@ export class QuidaxController {
   @HttpCode(HttpStatus.OK)
   async fetchSubaccounts(@Param('userId') userId: string) {
     //  return await this.quidax.wallets.fetch_all_user_wallets('me');
-    const data = await this.quidax.user.fetchSubAccount(userId);
+    /*  const data = await this.quidax.user.fetchSubAccount(userId);
 
     return data;
-
+ */
     // return await this.quidaxService.getUserWallets();
   }
 
@@ -73,14 +74,14 @@ export class QuidaxController {
     console.log(body, 'mvkmrkvmkr');
     //  return await this.quidax.wallets.fetch_all_user_wallets('me');
     // const data = await this.quidax.user.fetchSubAccount(userId);
-    const data = await this.quidax.user.createSubaccount(
+    /* const data = await this.quidax.user.createSubaccount(
       body.email,
       body.first_name,
       body.last_name,
     );
 
     console.log(data, 'bhbhbfh');
-    return data;
+    return data; */
     // return {};
     // return await this.quidaxService.getUserWallets();
   }
