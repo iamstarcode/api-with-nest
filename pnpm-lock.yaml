@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@iamstarcode/quidax-js':
-        specifier: 0.0.0-b3
-        version: 0.0.0-b3
+        specifier: 0.0.0-b4
+        version: 0.0.0-b4
       '@nestjs/common':
         specifier: ^10.0.0
         version: 10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
@@ -340,8 +340,8 @@ packages:
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
 
-  '@iamstarcode/quidax-js@0.0.0-b3':
-    resolution: {integrity: sha512-rk2bN1R8SO1dFCQWUy3K2SBhBuvaP7fYMMKa4/0lA43s+sg9nBj7hppXFfve/0A8qP5olFplEEzbV6yzL2i+4g==}
+  '@iamstarcode/quidax-js@0.0.0-b4':
+    resolution: {integrity: sha512-ZvtWhkHpYMMfP4c0thKmNlI3/EmxqREKqpuU3vJozRgdmuG2E0dDG1UE7N9KviSml47nAL6rao/LsFmhAYYyPw==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -3161,7 +3161,7 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.3': {}
 
-  '@iamstarcode/quidax-js@0.0.0-b3':
+  '@iamstarcode/quidax-js@0.0.0-b4':
     dependencies:
       axios: 1.7.2
       typescript: 5.5.3

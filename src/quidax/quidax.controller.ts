@@ -8,12 +8,11 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
+import Quidax from '@iamstarcode/quidax-js';
 import { QuidaxService } from './quidax.service';
 import { ConfigService } from '@nestjs/config';
 
 import { Request } from 'express';
-
-import Quidax from '@iamstarcode/quidax-js';
 
 // import Quidax from 'quidax-package'; // Typescript
 
